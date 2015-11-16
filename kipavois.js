@@ -11,7 +11,7 @@ module.exports = function(options) {
     var kibanaUserHeader = options.kibanaUserHeader || 'x-kibana-user',
         kibanaUserField = options.kibanaUserField || 'user',
         elasticsearchEndpoint = options.elasticsearchEndpoint || 'elasticsearch:9200',
-        port = options.port || 9200,
+        listenPort = options.listenPort || 8000,
         proxy = httpProxy.createProxyServer({
             target: 'http://' + elasticsearchEndpoint
         }),
@@ -173,8 +173,9 @@ module.exports = function(options) {
               req.emit('data', newBody)
             });
     var start_proxy = function() {
-      http.createServer(app).listen(port, function(){
-        console.log('proxy listen ' + port);
+      console.log('Trying to bind to port ' + listenPort);
+      http.createServer(app).listen(listenPort, function(){
+        console.log('proxy listen ' + listenPort);
       });
     }
 
