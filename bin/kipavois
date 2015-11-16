@@ -16,5 +16,6 @@ program
 return kipavois({
   kibanaUserHeader: program.kibanaUserHeader,
   elasticsearchEndpoint: program.server,
-  kibanaUserField: program.filteredField
+  kibanaUserField: program.filteredField,
+  listenPort: program.port
 }).start_proxy();
