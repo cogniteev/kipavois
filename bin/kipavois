@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodejs
 'use strict';
 
 process.title = 'kipavois';
@@ -8,6 +8,7 @@ var program = require('commander'),
 
 program
   .option('-u, --kibana-user-header <header>', 'HTTP header used to get the Kibana user (defaults to `x-kibana-user`)', 'x-kibana-user')
+  .option('-r, --kibana-user-header-regex <regex>', 'regular expression that should be applied on the HTTP header in order to get the list of allowed Kibana users (defaults to `([^,]+),?`)', '([^,]+),?')
   .option('-f, --filtered-field <field>', 'Name of the Elasticsearch field to filter on (defaults to `user`).', 'user')
   .option('-s, --server <host:port>', 'Elasticsearch endpoint (default to `elasticsearch:9200`)', 'elasticsearch:9200')
   .option('-p, --port <port>', 'Listening port (default to `8000`)', parseInt)
@@ -15,6 +16,8 @@ program
 
 return kipavois({
   kibanaUserHeader: program.kibanaUserHeader,
+  kibanaUserHeaderRegex: program.kibanaUserHeaderRegex,
   elasticsearchEndpoint: program.server,
-  kibanaUserField: program.filteredField
+  kibanaUserField: program.filteredField,
+  listenPort: program.port
 }).start_proxy();

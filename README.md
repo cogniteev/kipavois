@@ -32,11 +32,12 @@ Usage: kipavois [options]
 
 Options:
 
-  -h, --help                         output usage information
-  -u, --kibana-user-header <header>  HTTP header used to get the Kibana user (defaults to `x-kibana-user`)
-  -f, --filtered-field <field>       Name of the Elasticsearch field to filter on (defaults to `user`).
-  -s, --server <host:port>           Elasticsearch endpoint (default to `elasticsearch:9200`)
-  -p, --port <port>                  Listening port (default to `8000`)
+  -h, --help                             output usage information
+  -u, --kibana-user-header <header>      HTTP header used to get the Kibana user (defaults to `x-kibana-user`)
+  -r, --kibana-user-header-regex <regex> regular expression that should be applied on the HTTP header in order to get the list of allowed Kibana users (single value or a comma separated list is accepted by default: '([^,]+),?' )
+  -f, --filtered-field <field>           Name of the Elasticsearch field to filter on (defaults to `user`).
+  -s, --server <host:port>               Elasticsearch endpoint (default to `elasticsearch:9200`)
+  -p, --port <port>                      Listening port (default to `8000`)
 ```
 
 ## Behavior
