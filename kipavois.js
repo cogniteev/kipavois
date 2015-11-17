@@ -9,6 +9,7 @@ require('prototypes');
 
 module.exports = function(options) {
     var kibanaUserHeader = options.kibanaUserHeader || 'x-kibana-user',
+        kibanaUserHeaderRegex = options.kibanaUserHeaderRegex || '([^,]+),?',
         kibanaUserField = options.kibanaUserField || 'user',
         elasticsearchEndpoint = options.elasticsearchEndpoint || 'elasticsearch:9200',
         listenPort = options.listenPort || 8000,
@@ -73,9 +74,11 @@ module.exports = function(options) {
           }
           var newTerm = {}
           newTerm[term] = value
-          bool_filter.must.push({
-            'term': newTerm
-          })
+          if (value.length > 0) {
+            bool_filter.must.push({
+              'terms': newTerm
+            })
+          }
         },
         app = connect()
             .use(function(req, res, next) {
@@ -145,7 +148,13 @@ module.exports = function(options) {
                 try {
                   allowedTerms = JSON.parse(req.headers[kibanaUserHeader]);
                 } catch (e) {
-                  allowedTerms = req.headers[kibanaUserHeader];
+                  var kibanaUserHeaderValue = req.headers[kibanaUserHeader];
+                  allowedTerms = []
+                  var re = new RegExp(kibanaUserHeaderRegex, 'gmi');
+                  var result = [];
+                  while((result = re.exec(kibanaUserHeaderValue)) != null) {
+                    allowedTerms.push(result[1]);
+                  }
                 }
                 add_term_filter_msearch(q, kibanaUserField, allowedTerms, function(message) {
                   logger.error(message, {
